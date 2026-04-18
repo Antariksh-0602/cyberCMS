@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <h2>Best Practices</h2>
+
+    <table border="1">
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Status</th>
+        </tr>
+
+        <tr th:each="bp : ${list}">
+            <td th:text="${bp.title}"></td>
+            <td th:text="${bp.description}"></td>
+            <td th:text="${bp.category.name}"></td>
+            <td th:text="${bp.status}"></td>
+        </tr>
+    </table>
+
+    <a href="/best-practice/add">Add New</a>
+
+</body>
+
+</html>

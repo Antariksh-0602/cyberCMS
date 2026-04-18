@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <h2>Add Best Practice</h2>
+
+    <form th:action="@{/best-practice/save}" method="post" th:object="${bestPractice}">
+
+        Title: <input type="text" th:field="*{title}" /><br><br>
+
+        Description: <textarea th:field="*{description}"></textarea><br><br>
+
+        Category:
+        <select th:field="*{category}">
+            <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}">
+            </option>
+        </select>
+
+        <br><br>
+        <button type="submit">Save</button>
+
+    </form>
+
+    <a href="/best-practice/list">View List</a>
+
+</body>
+
+</html>
