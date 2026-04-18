@@ -4,22 +4,25 @@
 <body>
 
     <h2>Add Best Practice</h2>
+    <!-- <input type="hidden" th:field="*{id}" /> -->
 
     <form th:action="@{/best-practice/save}" method="post" th:object="${bestPractice}">
-
+        <input type="hidden" name="id" th:value="${bestPractice.id}" />
+        <!-- <input type="hidden" th:field="*{id}" /> -->
+    
         Title: <input type="text" th:field="*{title}" /><br><br>
-
+    
         Description: <textarea th:field="*{description}"></textarea><br><br>
-
+    
         Category:
-        <select th:field="*{category}">
+        <select name="categoryId">
             <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}">
             </option>
         </select>
-
+    
         <br><br>
         <button type="submit">Save</button>
-
+    
     </form>
 
     <a href="/best-practice/list">View List</a>
