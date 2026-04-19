@@ -49,6 +49,19 @@ public class ITServiceController {
         return "redirect:/admin/it-services";
     }
 
+    // EDIT
+    @GetMapping("/admin/it-services/edit/{id}")
+    public String edit(@PathVariable Long id, Model model) {
+
+        ITService s = repo.findById(id).orElse(new ITService());
+
+        model.addAttribute("service", s);
+        model.addAttribute("list", repo.findAll());
+
+        return "it-services";
+    }
+
+    // DELETE
     @GetMapping("/admin/it-services/delete/{id}")
     public String delete(@PathVariable Long id) {
         repo.deleteById(id);

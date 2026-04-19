@@ -49,6 +49,17 @@ public class PolicyController {
         return "redirect:/admin/policies";
     }
 
+    @GetMapping("/admin/policies/edit/{id}")
+    public String edit(@PathVariable Long id, Model model) {
+
+        Policy p = policyRepository.findById(id).orElse(new Policy());
+
+        model.addAttribute("policy", p);
+        model.addAttribute("list", policyRepository.findAll());
+
+        return "policies";
+    }
+
     @GetMapping("/admin/policies/delete/{id}")
     public String delete(@PathVariable Long id) {
         policyRepository.deleteById(id);
