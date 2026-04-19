@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>IT Services</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+    <div class="container mt-5">
+
+        <h2 class="text-center mb-4">IT Services</h2>
+
+        <!-- FORM -->
+        <div class="card mb-4 shadow">
+            <div class="card-header bg-info text-white">Add / Edit Service</div>
+            <div class="card-body">
+
+                <form action="/admin/it-services/save" method="post">
+
+                    <input type="hidden" name="id" th:value="${service.id}" />
+
+                    <input class="form-control mb-2" name="title" placeholder="Title" th:value="${service.title}"
+                        required>
+
+                    <input class="form-control mb-2" name="description" placeholder="Description"
+                        th:value="${service.description}" required>
+
+                    <button class="btn btn-success">Save</button>
+
+                </form>
+
+            </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">All Services</div>
+            <div class="card-body">
+
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+
+                    <tr th:each="s : ${list}">
+                        <td th:text="${s.title}"></td>
+                        <td th:text="${s.description}"></td>
+                        <td>
+                            <a th:href="@{/admin/it-services/edit/{id}(id=${s.id})}"
+                                class="btn btn-warning btn-sm">Edit</a>
+                            <a th:href="@{/admin/it-services/delete/{id}(id=${s.id})}"
+                                class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

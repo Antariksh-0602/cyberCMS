@@ -14,16 +14,22 @@ public class CategoryController {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @GetMapping("/category/add")
-    public String showForm(Model model) {
+    @GetMapping("/admin/categories")
+    public String categories(Model model) {
         model.addAttribute("category", new Category());
-        return "category-form";
+        model.addAttribute("categories", categoryRepository.findAll());
+        return "categories";
     }
+    // @GetMapping("/category/add")
+    // public String showForm(Model model) {
+    //     model.addAttribute("category", new Category());
+    //     return "category-form";
+    // }
 
     @PostMapping("/category/save")
     public String save(@ModelAttribute Category category) {
         categoryRepository.save(category);
-        return "redirect:/category/list";
+        return "redirect:/admin/categories";
     }
 
     @GetMapping("/category/list")
