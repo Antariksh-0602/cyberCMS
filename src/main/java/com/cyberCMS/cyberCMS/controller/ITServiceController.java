@@ -30,7 +30,24 @@ public class ITServiceController {
                        @RequestParam String description,
                        @RequestParam String securityProvisions,
                        @RequestParam String dos,
-                       @RequestParam String donts) {
+                       @RequestParam String donts,
+                       Model model) {
+
+        // 🔥 DUPLICATE CHECK
+        boolean exists;
+
+        if (id == null) {
+            exists = repo.existsByTitle(title.trim());
+        } else {
+            exists = repo.existsByTitleAndIdNot(title.trim(), id);
+        }
+
+        if (exists) {
+            model.addAttribute("error", "IT Service with this title already exists!");
+            model.addAttribute("service", new ITService());
+            model.addAttribute("list", repo.findAll());
+            return "it-services"; // ❗ IMPORTANT: not redirect
+        }
 
         ITService s;
 
@@ -47,7 +64,7 @@ public class ITServiceController {
         s.setDescription(description);
         s.setSecurityProvisions(securityProvisions);
         s.setDos(dos);
-        s.setDonts(donts); 
+        s.setDonts(donts);
         s.setStatus("ACTIVE");
 
         repo.save(s);

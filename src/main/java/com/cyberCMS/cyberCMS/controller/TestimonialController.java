@@ -34,8 +34,19 @@ public class TestimonialController {
             @RequestParam String name,
             @RequestParam String jobPost,
             @RequestParam String message,
-            @RequestParam(required = false) MultipartFile imageFile
+            @RequestParam(required = false) MultipartFile imageFile,
+            Model model
     ) {
+
+        // 🚨 DUPLICATE CHECK (only for NEW entries)
+    	boolean exists = repo.existsByName(name.trim());
+
+    	if (id == null && exists) {
+    	    model.addAttribute("error", "This person already has a testimonial!");
+    	    model.addAttribute("testimonial", new Testimonial());
+    	    model.addAttribute("list", repo.findAll());
+    	    return "testimonial";
+        }
 
         Testimonial t;
 
@@ -50,18 +61,18 @@ public class TestimonialController {
         t.setJobPost(jobPost);
         t.setMessage(message);
 
-        // ✅ SAFE IMAGE UPLOAD
+        // ✅ IMAGE UPLOAD (your code untouched)
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
-            	Path uploadDir = Paths.get(System.getProperty("user.dir"), "uploads");
+                Path uploadDir = Paths.get(System.getProperty("user.dir"), "uploads");
 
                 if (!Files.exists(uploadDir)) {
                     Files.createDirectories(uploadDir);
                 }
 
                 String original = imageFile.getOriginalFilename();
-                String ext = (original != null && original.contains(".")) 
-                        ? original.substring(original.lastIndexOf(".")) 
+                String ext = (original != null && original.contains("."))
+                        ? original.substring(original.lastIndexOf("."))
                         : "";
 
                 String filename = UUID.randomUUID().toString() + ext;
@@ -73,7 +84,7 @@ public class TestimonialController {
                 t.setPhoto("/uploads/" + filename);
 
             } catch (Exception e) {
-                e.printStackTrace(); // 🔥 don't crash app
+                e.printStackTrace();
             }
         }
 

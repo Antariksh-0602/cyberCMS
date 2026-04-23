@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login - Cyber CMS</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+		body {
+		    height: 100vh;
+		    background: linear-gradient(135deg, #020617, #0f172a);
+		    
+		    display: flex;
+		    align-items: center;
+		    justify-content: center; /* 🔥 THIS FIXES EVERYTHING */
+
+		    color: #e2e8f0;
+		}
+
+		.login-card {
+		    width: 380px;
+		    padding: 32px;
+		    border-radius: 20px;
+		    background: #0f172a;
+		    border: 1px solid rgba(255,255,255,0.08);
+		    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+
+		    margin: auto; /* 🔥 ensures center */
+		}
+
+        .login-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            font-size: 13px;
+            color: #8c9dbf;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: #131f3c;
+            color: #fff;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: #3b82f6;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            background: #3b82f6;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-login:hover {
+            background: #2563eb;
+        }
+
+        .error {
+            color: #ef4444;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .success {
+            color: #22c55e;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .brand span {
+            color: #3b82f6;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-card">
+
+    <div class="brand">
+        <h2>Cyber<span>.CMS</span></h2>
+    </div>
+
+    <div class="login-title">Welcome Back</div>
+    <div class="login-subtitle">Login to your admin dashboard</div>
+
+    <!-- ERROR -->
+	<div th:if="${param.error}" 
+	     style="background:#7f1d1d; padding:10px; border-radius:10px; margin-bottom:12px; color:#fff;">
+	    Invalid username or password
+	</div>
+
+    <!-- LOGOUT -->
+    <div th:if="${param.logout}" class="success">
+        Logged out successfully
+    </div>
+
+    <form method="post" action="/login">
+        <div class="form-group">
+            <input type="text" name="username" class="form-control" placeholder="Username" required>
+        </div>
+
+		<div class="form-group" style="position: relative;">
+		    <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+		    <span onclick="togglePassword()" 
+		          style="position:absolute; right:15px; top:50%; transform:translateY(-50%); cursor:pointer; color:#8c9dbf;">
+		        👁
+		    </span>
+		</div>
+
+		<script>
+		function togglePassword() {
+		    const pwd = document.getElementById("password");
+		    pwd.type = pwd.type === "password" ? "text" : "password";
+		}
+		</script>
+
+		<button type="submit" class="btn-login" id="loginBtn">Login</button>
+
+		<script>
+		document.querySelector("form").addEventListener("submit", function() {
+		    const btn = document.getElementById("loginBtn");
+		    btn.innerText = "Logging in...";
+		    btn.disabled = true;
+		});
+		</script>
+    </form>
+	<div style="text-align:center; margin-top:20px; font-size:12px; color:#7c93b8;">
+	    © 2026 Cyber CMS
+	</div>
+
+</div>
+
+</body>
+</html>

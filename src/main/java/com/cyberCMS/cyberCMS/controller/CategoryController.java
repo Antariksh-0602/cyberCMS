@@ -22,14 +22,28 @@ public class CategoryController {
         model.addAttribute("categories", categoryRepository.findAll());
         return "categories";
     }
-    // @GetMapping("/category/add")
-    // public String showForm(Model model) {
-    //     model.addAttribute("category", new Category());
-    //     return "category-form";
-    // }
 
     @PostMapping("/category/save")
-    public String save(@ModelAttribute Category category) {
+    public String save(@ModelAttribute Category category, Model model) {
+
+        // 🔥 DUPLICATE CHECK
+        boolean exists;
+
+        if (category.getId() == null) {
+            exists = categoryRepository.existsByName(category.getName().trim());
+        } else {
+            exists = categoryRepository.existsByNameAndIdNot(
+                    category.getName().trim(),
+                    category.getId()
+            );
+        }
+
+        if (exists) {
+            model.addAttribute("error", "Category already exists!");
+            model.addAttribute("category", new Category());
+            model.addAttribute("categories", categoryRepository.findAll());
+            return "categories"; // ❗ stay on same page
+        }
 
         if (category.getId() == null) {
             category.setCreatedAt(LocalDateTime.now());
@@ -38,9 +52,10 @@ public class CategoryController {
         category.setUpdatedAt(LocalDateTime.now());
 
         categoryRepository.save(category);
+
         return "redirect:/admin/categories";
     }
-
+    
     @GetMapping("/category/edit/{id}")
     public String edit(@PathVariable Long id, Model model) {
         Category category = categoryRepository.findById(id).orElse(new Category());

@@ -34,11 +34,27 @@ public class PolicyController {
                        @RequestParam String title,
                        @RequestParam String description,
                        @RequestParam(required = false) MultipartFile imageFile,
-                       @RequestParam String link) {
+                       @RequestParam String link,
+                       Model model) {
+
+        // ✅ DUPLICATE CHECK
+        boolean exists;
+
+        if (id == null) {
+            exists = policyRepository.existsByTitle(title);
+        } else {
+            exists = policyRepository.existsByTitleAndIdNot(title, id);
+        }
+
+        if (exists) {
+            model.addAttribute("error", "Policy with this title already exists!");
+            model.addAttribute("policy", new Policy());
+            model.addAttribute("list", policyRepository.findAll());
+            return "policies"; // ⚠️ same page
+        }
 
         Policy p;
 
-        // ✅ CREATE / UPDATE LOGIC
         if (id != null) {
             p = policyRepository.findById(id).orElse(new Policy());
             p.setUpdatedAt(LocalDateTime.now());
@@ -53,7 +69,7 @@ public class PolicyController {
         p.setLink(link);
         p.setStatus("ACTIVE");
 
-        // ✅ IMAGE UPLOAD (CLEAN + SAFE)
+        // IMAGE UPLOAD (same as yours)
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
                 Path uploadDir = Paths.get(System.getProperty("user.dir"), "uploads");
@@ -63,18 +79,21 @@ public class PolicyController {
 
                 String originalFilename = imageFile.getOriginalFilename();
                 String extension = "";
+
                 if (originalFilename != null && originalFilename.contains(".")) {
                     extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
                 }
+
                 String filename = UUID.randomUUID().toString() + extension;
                 Path targetPath = uploadDir.resolve(filename);
                 imageFile.transferTo(targetPath.toFile());
+
                 p.setImage("/uploads/" + filename);
+
             } catch (IOException e) {
                 throw new RuntimeException("Failed to save uploaded image", e);
             }
-        }
-        // ✅ KEEP OLD IMAGE IF NO NEW IMAGE
+        } 
         else if (id != null) {
             Policy existing = policyRepository.findById(id).orElse(null);
             if (existing != null) {

@@ -8,14 +8,110 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background: #081123; color: #e9eef8; }
         .cms-wrapper { display: flex; min-height: 100vh; }
-        .sidebar { width: 240px; background: #0f1923; position: fixed; top: 0; left: 0; height: 100%; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid rgba(255,255,255,0.07); z-index: 10; }
-        .sidebar .brand { padding: 28px 24px 16px; font-size: 22px; font-weight: 700; color: #fff; }
-        .sidebar .brand span { color: #3b82f6; }
-        .sidebar .sidebar-note { padding: 0 24px 20px; color: #7c93b8; font-size: 13px; }
-        .sidebar-nav { display: flex; flex-direction: column; gap: 6px; padding: 0 12px; }
-        .sidebar-nav a { display: flex; align-items: center; padding: 12px 18px; border-radius: 14px; color: #c7d2ff; text-decoration: none; transition: background 0.2s, color 0.2s; font-size: 14px; }
-        .sidebar-nav a:hover, .sidebar-nav a.active { background: rgba(255,255,255,0.08); color: #fff; }
-        .sidebar-footer { padding: 18px 24px; color: #7c93b8; font-size: 12px; }
+		/* ===== SIDEBAR ===== */
+		.sidebar {
+		    width: 240px;
+		    background: #0b1220;
+		    position: fixed;
+		    top: 0;
+		    left: 0;
+		    height: 100%;
+		    display: flex;
+		    flex-direction: column;
+		    border-right: 1px solid rgba(255,255,255,0.06);
+		}
+
+		/* ===== BRAND ===== */
+		.brand {
+		    padding: 28px 22px 18px;
+		}
+
+		.brand-tag {
+		    font-size: 11px;
+		    letter-spacing: 2px;
+		    color: #8c9dbf;
+		    margin-bottom: 6px;
+		}
+
+		.brand-name {
+		    font-size: 22px;
+		    font-weight: 700;
+		    color: #ffffff;
+		}
+
+		.brand-dot {
+		    color: #3b82f6;
+		}
+
+		/* ===== NAV SECTION ===== */
+		.nav-section {
+		    margin-top: 10px;
+		}
+
+		.nav-label {
+		    font-size: 12px;
+		    color: #6b7da6;
+		    padding: 0 22px 10px;
+		    letter-spacing: 1px;
+		}
+
+		/* ===== NAV ITEMS ===== */
+		.nav-item {
+		    display: flex;
+		    align-items: center;
+		    gap: 12px;
+		    padding: 12px 22px;
+		    font-size: 14px;
+		    color: #a9b4cc;
+		    text-decoration: none;
+		    border-left: 3px solid transparent;
+		    transition: all 0.2s ease;
+		}
+
+		.nav-item svg {
+		    opacity: 0.7;
+		}
+
+		/* hover */
+		.nav-item:hover {
+		    background: rgba(255,255,255,0.05);
+		    color: #ffffff;
+		}
+
+		.nav-item:hover svg {
+		    opacity: 1;
+		}
+
+		/* ACTIVE (THIS IS THE KEY DIFFERENCE) */
+		.nav-item.active {
+		    background: rgba(59,130,246,0.12);
+		    color: #ffffff;
+		    border-left: 3px solid #3b82f6;
+		}
+
+		.nav-item.active svg {
+		    opacity: 1;
+		}
+
+		/* ===== FOOTER ===== */
+		.sidebar-footer {
+		    margin-top: auto;
+		    padding: 20px 22px;
+		    font-size: 12px;
+		    color: #6b7da6;
+		}
+		.sidebar {
+		    transition: transform 0.25s ease;
+		}
+
+		.sidebar.hidden {
+		    transform: translateX(-100%);
+		}
+
+		.main.full {
+		    margin-left: 0;
+		    width: 100%;
+		}
         .main { margin-left: 240px; width: calc(100% - 240px); }
         .topbar { height: 68px; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; background: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.08); position: sticky; top: 0; z-index: 5; }
         .topbar-title { font-size: 16px; font-weight: 600; letter-spacing: 0.02em; }
@@ -45,28 +141,60 @@
 
 <body>
     <div class="cms-wrapper">
-        <aside class="sidebar" id="sidebar">
-            <div>
-                <div class="brand">Cyber<span>.</span>CMS</div>
-                <div class="sidebar-note">Admin dashboard navigation</div>
-                <nav class="sidebar-nav">
-                    <a href="/dashboard">Dashboard</a>
-                    <a href="/admin/categories">Categories</a>
-                    <a href="/admin/best-practices" class="active">Best Practices</a>
-                    <a href="/admin/policies">Policies</a>
-                    <a href="/admin/it-services">IT Services</a>
-                    <a href="/admin/testimonials">Testimonials</a>
-                </nav>
-            </div>
-            <div class="sidebar-footer">© 2026 Cyber CMS</div>
-        </aside>
+		<div class="sidebar" id="sidebar">
+			<div class="brand">
+			    <div class="brand-tag">CONTENT MANAGEMENT</div>
+			    <div class="brand-name">
+			        Cyber<span class="brand-dot">.</span>CMS
+			    </div>
+			</div>
+		    <!-- navbar -->
+		    <div class="nav-section">
+		        <div class="nav-label">Main</div>
+		        <a class="nav-item" href="/dashboard">
+		            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+		                <path d="M2 2h5v5H2zm7 0h5v5H9zM2 9h5v5H2zm7 0h5v5H9z" />
+		            </svg>Dashboard
+		        </a>
+		        <a class="nav-item" href="/admin/categories">
+		            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+		                <path
+		                    d="M1 3a1 1 0 011-1h12a1 1 0 010 2H2a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 010 2H2a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 010 2H2a1 1 0 01-1-1z" />
+		            </svg>Categories
+		        </a>
+		        <a class="nav-item active" href="/admin/best-practices">
+		            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+		                <path d="M8 1l1.9 4h4.1l-3.3 2.6 1.3 4L8 9l-4 2.6 1.3-4L2 5h4.1z" />
+		            </svg>Best Practices
+		        </a>
+		        <a class="nav-item" href="/admin/policies">
+		            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+		                <path d="M8 1L3 3v5c0 3.3 2.1 6.4 5 7 2.9-.6 5-3.7 5-7V3z" />
+		            </svg>Policies
+		        </a>
+		        <a class="nav-item" href="/admin/it-services">
+		            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+		                <path
+		                    d="M2 3h12a1 1 0 011 1v7a1 1 0 01-1 1H2a1 1 0 01-1-1V4a1 1 0 011-1zm0 2v6h12V5H2zm3 7h6v1H5z" />
+		            </svg>IT Services
+		        </a>
+		        <a class="nav-item" href="/admin/testimonials">
+		            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+		                <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm-1 9V8h2v2zm0-4V4h2v2z" />
+		            </svg>Testimonials
+		        </a>
+		    </div>
+		    <div class="sidebar-footer">
+		        <p>Cyber CMS v2.0</p>
+		    </div>
+		</div>
 
         <div class="main">
             <header class="topbar">
                 <button class="topbar-toggle" onclick="toggleSidebar()">☰</button>
                 <div>
-                    <div class="topbar-title">Best Practices</div>
-                    <div class="topbar-subtitle">Create, organize, and publish security best practices.</div>
+                    <div class="topbar-title">Welcome User</div>
+					<div class="topbar-subtitle">Your centralized content management hub.</div>
                 </div>
                 <div class="topbar-badge">Guidelines</div>
             </header>
@@ -83,6 +211,12 @@
                     <div class="panel-card">
                         <div class="panel-card-header">Add / Edit Best Practice</div>
                         <div class="panel-card-body">
+							<div th:if="${error}" 
+							     style="margin-bottom: 16px; padding: 14px 18px; border-radius: 12px; 
+							            background: rgba(239, 68, 68, 0.15); color: #f87171; 
+							            border: 1px solid rgba(239, 68, 68, 0.4); font-weight: 500;">
+							    ⚠ <span th:text="${error}"></span>
+							</div>
                             <form action="/admin/best-practices/save" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="id" th:value="${bestPractice.id}" />
                                 <div class="mb-3">
@@ -176,7 +310,13 @@
     </div>
 
     <script>
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('show'); }
+		function toggleSidebar() {
+		    const sidebar = document.getElementById("sidebar");
+		    const main = document.querySelector(".main");
+
+		    sidebar.classList.toggle("hidden");
+		    main.classList.toggle("full");
+		}
         document.getElementById('imageFile')?.addEventListener('change', function (event) {
             const file = event.target.files[0];
             const preview = document.getElementById('previewImg');

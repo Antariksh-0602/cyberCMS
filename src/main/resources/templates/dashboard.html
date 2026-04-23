@@ -747,19 +747,41 @@
             gap: 10px;
         }
     
-        .testi-avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: var(--color-background-info);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 500;
-            color: var(--color-text-info);
-            flex-shrink: 0;
-        }
+		.avatar {
+		    width: 42px;
+		    height: 42px;
+		    border-radius: 50%;
+		    overflow: hidden;
+		    background: #1e2b4a;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    color: #9fb4ff;
+		    font-size: 12px;
+		    font-weight: 600;
+		}
+
+		.avatar img {
+		    width: 100%;
+		    height: 100%;
+		    object-fit: cover;
+		}
+		.policy-icon {
+		    width: 44px;
+		    height: 44px;
+		    border-radius: 50%;
+		    background: rgba(59,130,246,0.1);
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    overflow: hidden;
+		}
+
+		.policy-icon img {
+		    width: 100%;
+		    height: 100%;
+		    object-fit: cover;
+		}
     
         .testi-name {
             font-size: 13px;
@@ -916,7 +938,7 @@
 
                 <div class="section-block">
                     <div class="section-header">
-                        <div class="section-title">Best Practices</div>
+                        <div class="section-title">CATEGORIES</div>
                     </div>
                     <div class="bp-toolbar">
                         <div class="bp-tabs" id="bp-tabs">
@@ -965,12 +987,14 @@
                     <div class="policy-list">
     
                         <div class="policy-item" th:each="p : ${policies}">
-                            <div class="policy-icon-box">
-                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-                                    <rect x="3" y="1" width="10" height="14" rx="1.5" />
-                                    <path d="M5 5h6M5 8h6M5 11h4" />
-                                </svg>
-                            </div>
+							<div class="policy-icon">
+							    <img th:if="${p.image != null}" th:src="${p.image}" alt="logo">
+							    <span th:if="${p.image == null}">
+							        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+							            <path d="M3 2h10v12H3zM5 5h6v1H5zm0 2h6v1H5zm0 2h4v1H5z"/>
+							        </svg>
+							    </span>
+							</div>
                             <div class="policy-text">
                                 <div class="policy-name" th:text="${p.title}">Acceptable Use Policy</div>
                                 <div class="policy-desc" th:text="${p.description}">Defines acceptable use of company
@@ -1008,7 +1032,10 @@
                             <div class="testi-msg" th:text="${t.message}">This platform transformed how our team manages
                                 security policies.</div>
                             <div class="testi-author">
-                                <div class="testi-avatar" th:text="${#strings.substring(t.name,0,2)}">JD</div>
+								<div class="avatar">
+								    <img th:if="${t.photo != null}" th:src="${t.photo}" alt="avatar">
+								    <span th:if="${t.photo == null}" th:text="${#strings.substring(t.name,0,2)}"></span>
+								</div>
                                 <div>
                                     <div class="testi-name" th:text="${t.name}">Jane Doe</div>
                                     <div class="testi-role" th:text="${t.jobPost}">IT Manager</div>

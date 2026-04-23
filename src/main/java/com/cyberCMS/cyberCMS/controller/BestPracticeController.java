@@ -44,8 +44,33 @@ public class BestPracticeController {
             @RequestParam String description,
             @RequestParam(required = false) MultipartFile imageFile,
             @RequestParam String link,
-            @RequestParam Long categoryId
+            @RequestParam Long categoryId,
+            Model model
     ) {
+
+        // 🔥 CLEAN INPUT
+        title = title.trim();
+
+        // 🔥 FETCH CATEGORY FIRST
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        // 🔥 DUPLICATE CHECK (FIXED)
+        boolean exists;
+
+        if (id == null) {
+            exists = bestPracticeRepository.existsByTitleAndCategory(title, category);
+        } else {
+            exists = bestPracticeRepository.existsByTitleAndCategoryAndIdNot(title, category, id);
+        }
+
+        if (exists) {
+            model.addAttribute("error", "Best Practice already exists in this category!");
+            model.addAttribute("bestPractice", new BestPractice());
+            model.addAttribute("categories", categoryRepository.findAll());
+            model.addAttribute("list", bestPracticeRepository.findAll());
+            return "best-practices";
+        }
 
         BestPractice bp;
 
@@ -65,27 +90,31 @@ public class BestPracticeController {
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
                 Path uploadDir = Paths.get(System.getProperty("user.dir"), "uploads");
+
                 if (!Files.exists(uploadDir)) {
                     Files.createDirectories(uploadDir);
                 }
 
                 String originalFilename = imageFile.getOriginalFilename();
                 String extension = "";
+
                 if (originalFilename != null && originalFilename.contains(".")) {
                     extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
                 }
+
                 String filename = UUID.randomUUID().toString() + extension;
                 Path targetPath = uploadDir.resolve(filename);
+
                 imageFile.transferTo(targetPath.toFile());
+
                 bp.setImage("/uploads/" + filename);
+
             } catch (IOException e) {
                 throw new RuntimeException("Failed to save uploaded image", e);
             }
         }
 
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found"));
         bp.setCategory(category);
-
         bp.setStatus("ACTIVE");
 
         bestPracticeRepository.save(bp);
